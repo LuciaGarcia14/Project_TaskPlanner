@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Planner</title>
+    <link rel="stylesheet" href="../css/form_event.css">
+    <script src="../js/index.js" defer></script>
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <ul class="nav-list">
+              <li><a href="./form.html">Crear tarea</a></li>
+              <li><a href="">Tareas completadas</li>
+              <li><a href="./events-list.html">Ver todas mis tareas</a></li>
+            </ul>
+          </nav>
+      </header>
+
+    <section>
+        <form id="create-form" class="create-form">
+          <div class="container-create-form">
+              <h1>CREAR EVENTO</h1>
+          <label for="title-event">Titulo</label>
+          <input
+            type="text"
+            name="title-event"
+            id="title-event"
+            class="title-event"
+            placeholder="Escriba el título"
+            required
+          />
+          <label for="description-event">Detalles relevantes</label>
+          <textarea
+            name="description-event"
+            id="description-event"
+            class="description-event"
+            placeholder="Escriba los detalles relevantes del evento"
+            required
+          ></textarea>
+          <label for="date-tasks">Fecha del Evento</label>
+          <input
+            type="date"
+            id="date-event"
+            name="date-event"
+            class="date-event"
+            required
+          />
+          <label for="status-event">Estado</label>
+          <select name="status-event" id="status-event">
+            <option value="completado" id="completed-event">Completado</option>
+            <option value="En proceso" id="in_process-event">En proceso</option>
+            <option value="Pendiente" id="pending-event">Pendiente</option>
+          </select>
+          <button id="btn_insert_event">Agregar</button>
+        </form>
+      </div>
+      </section>
+
+      
+</body>
+</html>
