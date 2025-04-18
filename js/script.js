@@ -1,21 +1,21 @@
 const form = document.getElementById('create-form');
 const table_event = document.getElementById('table-events');
 const table_body_event = document.getElementById('body_table-events');
+const body = document.body;
 
-const saved_events = localStorage.getItem('events');
-
-if (saved_events) {
-    try {
-        const events = JSON.parse(saved_events);
-        console.log("Eventos cargados del localStorage:", events);
-
-        events.forEach(event => add_event(event));
-        if (events.length > 0) {
-            table_event.style.display = 'block';
+if (body.id === 'event-list-page' && table_body_event) {
+    const saved_events = localStorage.getItem('events');
+    if (saved_events) {
+        try {
+            const events = JSON.parse(saved_events);
+            console.log("Eventos cargados del localStorage:", events);
+            events.forEach(event => add_event(event)); 
+            if (events.length > 0) {
+                table_event.style.display = 'block'; 
+            }
+        } catch (error) {
+            console.error('Error al cargar eventos:', error);
         }
-
-    } catch (error) {
-        console.error('Error al cargar eventos:', error);
     }
 }
 
@@ -43,8 +43,11 @@ if (btn_insert) {
         events.push(event_obj);
         localStorage.setItem('events', JSON.stringify(events));
 
-        add_event(event_obj);
-        table_event.style.display = 'block';
+        if (body.id === 'event-list-page' && table_body_event) {
+            add_event(event_obj);
+            table_event.style.display = 'block'; 
+        }
+
         form.reset();
     });
 }
@@ -57,16 +60,20 @@ function add_event(event) {
         <td>${event.date}</td>
         <td>${event.status}</td>
         <td>${event.weather}</td>
-        <td><img src="${event.url_img_cat}" width = "100"/></td>
+        <td><img src="${event.url_img_cat}" width="100" /></td>
         <td><button class="btn-delete">Eliminar</button></td>
-        <td><button class="btn-delete">Modificar</button></td>
+        <td><button class="btn-update">Modificar</button></td>
     `;
     table_body_event.appendChild(row);
+
+    row.querySelector('.btn-delete').addEventListener('click', () => {
+        event_delete(event.title);
+    });
 }
 
 async function get_weather(city = 'Sevilla') {
-    try{
-        const response = await fetch(`https://wttr.in/${city}?format=j1`)
+    try {
+        const response = await fetch(`https://wttr.in/${city}?format=j1`);
         const data = await response.json();
 
         const condition = data.current_condition[0];
@@ -74,20 +81,38 @@ async function get_weather(city = 'Sevilla') {
         const description_weather = condition.weatherDesc[0].value;
 
         return `${temperature}°C - ${description_weather}`;
-    }catch(error){
+    } catch (error) {
         console.error('Error en la petición', error);
-        return 'Error en obtener clima.'
+        return 'Error en obtener clima.';
     }
 }
 
-async function get_cat(){
-    try{
+async function get_cat() {
+    try {
         const response = await fetch('https://api.thecatapi.com/v1/images/search');
         const data = await response.json();
         const url = data[0].url;
         return url;
-    }catch(error){
-        console.error('Eror en la petición', error);
-        return 'Error al obtener imagen de gatito.'
+    } catch (error) {
+        console.error('Error en la petición', error);
+        return 'Error al obtener imagen de gatito.';
+    }
+}
+
+function event_delete(title) {
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+    events = events.filter(event => event.title !== title);
+    localStorage.setItem('events', JSON.stringify(events));
+
+    const rows = table_body_event.querySelectorAll('tr');
+    rows.forEach(row => {
+        if (row.cells[0].textContent === title) {
+            row.remove();
+        }
+    });
+
+    if (events.length === 0) {
+        table_event.style.display = 'none';
+        alert('¡No hay eventos!');
     }
 }

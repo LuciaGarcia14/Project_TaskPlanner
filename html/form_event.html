@@ -8,7 +8,8 @@
     <script src="../js/script.js" defer></script>
     
 </head>
-<body>
+
+<body id="form-page">
     <header>
         <nav class="navbar">
             <ul class="nav-list">
@@ -19,46 +20,105 @@
           </nav>
       </header>
 
+    <main>
+      <img class="img_main" src="../img/main.jpeg" alt="Lugar magico para eventos y celebraciones.">
+    </main>
+
     <section>
-        <form id="create-form" class="create-form">
-          <div class="container-create-form">
-              <h1>CREAR EVENTO</h1>
-          <label for="title-event">Titulo</label>
+      <div>
+        <div class="container__main-title">
+          <h1>EVENTOS INTERESANTES</h1>
+        </div>
+        <div class="card-container">
+      <div class="card">
+        <img src="../img/evento1.jpg" alt="" class="card-img" />
+        <div class="card-content">
+          <h3 class="card-title">Sevilla</h3>
+          <p class="card-description">Espectaculares vistas, un buen almuerzo y una buena cena.</p>
+          <p class="card-description">Tendrás la oportunidad de poder conocer la ciudad Sevillana.</p>
+          <p class="card-description">Increíbles actividades por hacer.</p>
+          <p class="card-price">Por 114€</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../img/concierto.webp" alt="Concierto con muchas personas alrededor del escenario" class="card-img" />
+        <div class="card-content">
+          <h3 class="card-title">Alicante</h3>
+          <p class="card-description">Concierto de tu grupo favorito.</p>
+          <p class="card-description">Alojamiento a pie de playa y cerca del escenario.</p>
+          <p class="card-description">Buena música y buena comida.</p>
+          <p class="card-price">Por 98€</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../img/cata_vino.jpg" alt="Restaurante elegante" class="card-img" />
+        <div class="card-content">
+          <h3 class="card-title">Málaga</h3>
+          <p class="card-description">Cata de los mejores vinos de Málaga.</p>
+          <p class="card-description">Bonito restaurante donde comer mientras pruebas todos los vinos.</p>
+          <p class="card-description">Lugar cerca de la playa con buenas vistas.</p>
+          <p class="card-price">Por 50€</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../img/flamenco.jpg" alt="Tablado flamenco con personas tocando las palmas y bailando." class="card-img" />
+        <div class="card-content">
+          <h3 class="card-title">Madrid</h3>
+          <p class="card-description">Maravilloso recinto con un tablado flamenco.</p>
+          <p class="card-description">Buenos artistas y buena música.</p>
+          <p class="card-description">Arte y cultura.</p>
+          <p class="card-price">Por 35€</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-form">
+      <div class="container">
+        <h4>Crea el evento</h4>
+        <p>¡GUARDA, ALMACENA Y ORGANIZA TODOS TUS EVENTOS!</p>
+        <form id="create-form" class="form">
+          <label for="title-event">Título</label>
           <input
             type="text"
             name="title-event"
             id="title-event"
-            class="title-event"
             placeholder="Escriba el título"
             required
           />
+          
           <label for="description-event">Detalles relevantes</label>
           <textarea
             name="description-event"
             id="description-event"
-            class="description-event"
             placeholder="Escriba los detalles relevantes del evento"
             required
           ></textarea>
-          <label for="date-tasks">Fecha del Evento</label>
+          
+          <label for="date-event">Fecha del Evento</label>
           <input
             type="date"
             id="date-event"
             name="date-event"
-            class="date-event"
             required
           />
+          
           <label for="status-event">Estado</label>
-          <select name="status-event" id="status-event">
-            <option value="completado" id="completed-event">Completado</option>
-            <option value="En proceso" id="in_process-event">En proceso</option>
-            <option value="Pendiente" id="pending-event">Pendiente</option>
+          <select name="status-event" id="status-event" required>
+            <option value="completado">Completado</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Pendiente">Pendiente</option>
           </select>
-          <button id="btn_insert_event">Agregar</button>
+          <div class="container_buttons">
+            <button id="btn_insert_event">Agregar</button>
+            <a href="./event_list.html" class="show_events">Ver eventos</a>
+          </div>
+          
         </form>
       </div>
-      </section>
-
-      
+    </section>
+    
 </body>
 </html>
