@@ -16,8 +16,6 @@ if (saved_events) {
 
     } catch (error) {
         console.error('Error al cargar eventos:', error);
-        localStorage.removeItem('events');
-        console.warn('Se ha limpiado localStorage por datos corruptos');
     }
 }
 
@@ -31,13 +29,14 @@ if (btn_insert) {
         const date = document.getElementById('date-event').value;
         const status = document.getElementById('status-event').value;
         const weather = await get_weather('Sevilla');
+        const url_img_cat = await get_cat();
 
         if (!title || !detail || !date || !status) {
             alert('Complete todos los campos');
             return;
         }
 
-        const event_obj = { title, detail, date, status, weather};
+        const event_obj = { title, detail, date, status, weather, url_img_cat};
         console.log("Agregando nuevo evento:", event_obj);
 
         const events = JSON.parse(localStorage.getItem('events')) || [];
@@ -58,7 +57,7 @@ function add_event(event) {
         <td>${event.date}</td>
         <td>${event.status}</td>
         <td>${event.weather}</td>
-        <td></td>
+        <td><img src="${event.url_img_cat}" width = "100"/></td>
         <td><button class="btn-delete">Eliminar</button></td>
         <td><button class="btn-delete">Modificar</button></td>
     `;
@@ -78,5 +77,17 @@ async function get_weather(city = 'Sevilla') {
     }catch(error){
         console.error('Error en la petición', error);
         return 'Error en obtener clima.'
+    }
+}
+
+async function get_cat(){
+    try{
+        const response = await fetch('https://api.thecatapi.com/v1/images/search');
+        const data = await response.json();
+        const url = data[0].url;
+        return url;
+    }catch(error){
+        console.error('Eror en la petición', error);
+        return 'Error al obtener imagen de gatito.'
     }
 }
