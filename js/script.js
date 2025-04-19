@@ -40,6 +40,13 @@ if (btn_insert) {
         console.log("Agregando nuevo evento:", event_obj);
 
         const events = JSON.parse(localStorage.getItem('events')) || [];
+
+        const event_exist = events.find(event => event.title === title);
+        if(event_exist){
+            alert('¡ERROR! No puede existir eventos con mismo titulo.');
+            return;
+        }
+
         events.push(event_obj);
         localStorage.setItem('events', JSON.stringify(events));
 
@@ -67,7 +74,11 @@ function add_event(event) {
     table_body_event.appendChild(row);
 
     row.querySelector('.btn-delete').addEventListener('click', () => {
-        event_delete(event.title);
+        event_delete(event.title, row);
+    });
+
+    row.querySelector('.btn-update').addEventListener('click', ()=>{
+        edit_mode(row, event);
     });
 }
 
@@ -99,20 +110,64 @@ async function get_cat() {
     }
 }
 
-function event_delete(title) {
+function event_delete(title, row) {
     let events = JSON.parse(localStorage.getItem('events')) || [];
     events = events.filter(event => event.title !== title);
     localStorage.setItem('events', JSON.stringify(events));
 
-    const rows = table_body_event.querySelectorAll('tr');
-    rows.forEach(row => {
-        if (row.cells[0].textContent === title) {
-            row.remove();
-        }
-    });
+    row.remove();
 
     if (events.length === 0) {
         table_event.style.display = 'none';
         alert('¡No hay eventos!');
     }
+}
+
+function edit_mode(row, event){
+    const cells = row.querySelectorAll('td');
+
+    cells[1].innerHTML = `<input type="text" value="${event.detail}"/>`;
+    cells[2].innerHTML = `<input type="date" value="${event.date}"/>`;
+    cells[3].innerHTML = `
+    <select>
+        <option value="pendiente" ${event.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+        <option value="completado" ${event.status === 'completado' ? 'selected' : ''}>Completado</option>
+        <option value="en proceso" ${event.status === 'en proceso' ? 'selected' : ''}>En proceso</option>
+    </select>
+    `;
+    cells[6].innerHTML = `<button class="btn-save">Guardar</button>`
+    cells[7].innerHTML = `<button class="btn-cancel">Cancelar</button>`
+
+    cells[6].querySelector('.btn-save').addEventListener('click', ()=>{
+        save_edit(row, event.title);
+    });
+
+    cells[7].querySelector('.btn-cancel').addEventListener('click', ()=>{
+        cancel_edit(row, event);
+    });
+}
+
+function save_edit(row, title){
+    const cells = row.querySelectorAll('td');
+    const new_detail = cells[1].querySelector('input').value;
+    const new_date = cells[2].querySelector('input').value;
+    const new_status = cells[3].querySelector('select').value;
+
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+    const ind = events.findIndex(ev => ev.title === title); 
+
+    if(ind !== -1){
+        events[ind].detail = new_detail;
+        events[ind].date = new_date;
+        events[ind].status = new_status;
+
+        localStorage.setItem('events', JSON.stringify(events));
+        row.innerHTML= '';
+        add_event(events[ind]);
+    }
+}
+
+function cancel_edit(row, event){
+    row.innerHTML= '';
+    add_event(event);
 }
